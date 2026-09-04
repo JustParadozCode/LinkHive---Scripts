@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-// Construct path to root directory relative to /api/ directory
+// Read script.lua dynamically from the root directory
 const scriptPath = path.join(__dirname, '../script.lua');
 
 let luaSource = 'print("Error: script.lua file not found.")';
@@ -18,79 +18,123 @@ const html = `
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LinkHive | Unauthorized</title>
+  <title>LinkHive Security Gateway</title>
   <style>
     * { box-sizing: border-box; }
     body {
       margin: 0;
       min-height: 100vh;
-      background: radial-gradient(circle at center, #062c46 0%, #020914 45%, #010409 100%);
-      color: #00d9ff;
-      font-family: Arial, sans-serif;
+      background: radial-gradient(circle at center, #1c1503 0%, #0a0801 50%, #030200 100%);
+      color: #f1cf8e;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
     }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(rgba(212, 175, 55, 0.03) 1px, transparent 1px),
+                  linear-gradient(90deg, rgba(212, 175, 55, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
     .card {
-      width: min(100%, 650px);
-      padding: 40px 30px;
+      width: min(100%, 620px);
+      padding: 45px 35px;
       text-align: center;
-      border: 1px solid rgba(0, 220, 255, 0.45);
-      border-radius: 18px;
-      background: rgba(2, 15, 28, 0.82);
-      box-shadow: 0 0 25px rgba(0, 200, 255, 0.2);
-      backdrop-filter: blur(12px);
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      border-radius: 20px;
+      background: rgba(15, 12, 5, 0.85);
+      box-shadow: 0 0 35px rgba(212, 175, 55, 0.12), 
+                  inset 0 0 25px rgba(212, 175, 55, 0.04);
+      backdrop-filter: blur(16px);
+      animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    h1 {
-      margin: 0 0 10px 0;
-      font-size: 22px;
-      letter-spacing: 1px;
-      color: #ff4d4d;
-      text-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
-    }
-    .subtext {
-      color: #b9eefa;
-      font-size: 15px;
+    .badge {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 50px;
+      background: rgba(212, 175, 55, 0.1);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      color: #f3d798;
+      font-size: 11px;
+      letter-spacing: 2px;
+      font-weight: 600;
       margin-bottom: 20px;
     }
+    h1 {
+      margin: 0 0 12px 0;
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      background: linear-gradient(135deg, #fff3d1 0%, #d4af37 50%, #aa820a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+    }
+    .subtext {
+      color: #c9b996;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 25px;
+    }
     .code-box {
-      background: #010a15;
-      border: 1px solid #00d9ff;
-      border-radius: 8px;
-      padding: 15px;
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 13px;
-      color: #00ffcc;
+      background: #070603;
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      border-radius: 12px;
+      padding: 16px;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+      font-size: 12.5px;
+      color: #ffe8ab;
       word-break: break-all;
-      box-shadow: inset 0 0 10px rgba(0, 217, 255, 0.1);
+      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.8);
       margin: 20px 0;
       text-align: left;
+      user-select: all;
+    }
+    .divider {
+      height: 1px;
+      width: 60%;
+      margin: 30px auto;
+      background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
     }
     .credits {
-      margin-top: 25px;
       font-size: 13px;
-      color: #8cecff;
+      color: #d4af37;
+      font-weight: 500;
+      letter-spacing: 0.5px;
     }
     .footer {
-      margin-top: 15px;
+      margin-top: 8px;
       font-size: 11px;
-      color: #47798a;
-      letter-spacing: 1px;
+      color: #7e7152;
+      letter-spacing: 1.5px;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
   <div class="card">
-    <h1>You are not authorised to access this end point of the Script</h1>
-    <div class="subtext">Use Our Official Loader</div>
+    <div class="badge">SECURITY GATEWAY</div>
+    <h1>Access via Direct HTTP Request Restricted</h1>
     
-    <div class="code-box">
-      loadstring(game:HttpGet("https://link-hive-scripts.vercel.app/api/loader"))()
+    <div class="subtext">
+      You are not authorized to access this endpoint directly.<br>
+      Please execute the official loader script within your client environment:
     </div>
+    
+    <div class="code-box">loadstring(game:HttpGet("https://link-hive-scripts.vercel.app/api/loader"))()</div>
 
-    <div class="credits">Thanks for Luraph for Protection ❤️</div>
-    <div class="footer">Made by LiveHive-Scripts</div>
+    <div class="divider"></div>
+
+    <div class="credits">Protected by Luraph Obfuscation Architecture ✨</div>
+    <div class="footer">DEVELOPED BY LIVEHIVE SCRIPTS</div>
   </div>
 </body>
 </html>
@@ -99,7 +143,7 @@ const html = `
 export default function handler(req, res) {
   const userAgent = req.headers["user-agent"] || "";
 
-  // Normal browser traffic gets the UI block page
+  // Normal web browsers receive the gold security gateway
   if (userAgent.includes("Mozilla") && !userAgent.includes("Roblox")) {
     res.status(403);
     res.setHeader("Content-Type", "text/html; charset=utf-8");
@@ -111,4 +155,3 @@ export default function handler(req, res) {
   res.setHeader("Content-Type", "text/plain; charset=utf-8");
   return res.send(luaSource);
 }
-
