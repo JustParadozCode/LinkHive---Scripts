@@ -1,0 +1,8 @@
+{
+  "functions": {
+    "api/loader.js": {
+      "includeFiles": "script.lua"
+    }
+  }
+}
+
